@@ -17,7 +17,7 @@ pub async fn run(
     initial_command: Option<String>,
     api_endpoint: Option<String>,
     api_token: Option<SecretString>,
-    settings: &atuin_client::settings::Settings,
+    settings: &std::sync::Arc<atuin_client::settings::Settings>,
     output_for_hook: bool,
 ) -> Result<()> {
     if settings.ai.enabled == Some(false) {
@@ -198,7 +198,7 @@ fn snapshots_dir(settings: &atuin_client::settings::Settings) -> PathBuf {
 async fn run_inline_tui(
     ctx: AppContext,
     initial_prompt: Option<String>,
-    settings: &atuin_client::settings::Settings,
+    settings: &std::sync::Arc<atuin_client::settings::Settings>,
 ) -> Result<ExitOutcome> {
     let client_ctx = ClientContext::detect();
 
@@ -365,7 +365,7 @@ async fn run_inline_tui(
         cached_usage,
         initial_prompt,
         !usage_is_fresh,
-        settings.clone(),
+        std::sync::Arc::clone(settings),
     );
     let options =
         eye_declare::RunOptions::default().keyboard(eye_declare::KeyboardProtocol::Enhanced);
