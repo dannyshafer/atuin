@@ -19,7 +19,7 @@ use atuin_common::encryption::paseto_v4;
 use atuin_domain::caps::CapClient;
 use enum_dispatch::enum_dispatch;
 use eyre::{Context, Result};
-use tokio::sync::{RwLock, broadcast};
+use tokio::sync::{RwLock, RwLockReadGuard, broadcast};
 
 use crate::components::SearchComponent;
 use crate::events::DaemonEvent;
@@ -118,7 +118,7 @@ impl DaemonHandle {
     ///
     /// This acquires a read lock on the settings. Clone the `Arc` if you
     /// need to hold onto them.
-    pub async fn settings(&self) -> tokio::sync::RwLockReadGuard<'_, Arc<Settings>> {
+    pub async fn settings(&self) -> RwLockReadGuard<'_, Arc<Settings>> {
         self.state.settings.read().await
     }
 
